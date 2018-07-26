@@ -1,0 +1,81 @@
+
+tokens = ['NUMERO','STRING',
+          'LAMBDA','FILTER','REDUCE', 'MAPA',
+          'MAS','MENOS','POR','DIVIDIR','IGUAL',
+          'ABRIRPARENTESIS','CERRARPARENTESIS','ABRIRLLAVES','CERRARLLAVES','ABRIRCORCHETE','CERRARCORCHETE',
+          'MAYORQUE','MENORQUE','EXCLAMACION','OPERADORLOGICO','BOOLEANO',
+          'PUNTOYCOMA','COMA','DOSPUNTOS',
+          'IF','ELSE',
+          'VARIABLE','INT', 'STR']
+
+t_ignore = ' \t'
+
+
+reserved = {
+    'if': 'IF',
+    'else': 'ELSE',
+    'int': 'INT',
+    'str': 'STR',
+    'map': 'MAPA',
+    'filter': 'FILTER',
+    'reduce': 'REDUCE',
+    'lambda': 'LAMBDA'
+}
+
+
+def t_NUMERO(t):
+    r'\d+'
+    t.value = int(t.value)
+    return t
+
+
+t_STRING = r'"[a-zA-Z0-9_]+"'
+
+
+t_MAS = r'\+'
+t_MENOS = r'-'
+t_POR = r'\*'
+t_DIVIDIR = r'/'
+t_IGUAL = r'='
+
+t_ABRIRPARENTESIS = r'\('
+t_CERRARPARENTESIS = r'\)'
+t_ABRIRLLAVES = r'\{'
+t_CERRARLLAVES = r'\}'
+t_ABRIRCORCHETE = r'\['
+t_CERRARCORCHETE = r'\]'
+
+
+t_MAYORQUE = r'>'
+t_MENORQUE = r'<'
+t_EXCLAMACION = r'!'
+t_OPERADORLOGICO = r'AND | OR'
+t_BOOLEANO = r'True | False'
+
+
+t_PUNTOYCOMA = r';'
+t_COMA = r','
+t_DOSPUNTOS = r':'
+
+# t_LAMBDA = r'lambda'
+# t_FILTER = r'filter'
+# t_REDUCE = r'reduce'
+# t_MAPA = r'map'
+
+
+# t_VARIABLE = r'[\w]+'
+def t_VARIABLE(t):
+    r'[a-zA-Z_][a-zA-Z_0-9]*'
+    t.type = reserved.get(t.value, 'VARIABLE')    # Check for reserved words
+    return t
+
+
+def t_error(token):
+    print("Token desconocido: \n")
+    message = "\ntype:" + token.type
+    message += "\nvalue:" + str(token.value)
+    message += "\nline:" + str(token.lineno)
+    message += "\nposition:" + str(token.lexpos)
+    print(message)
+    token.lexer.skip(1)
+    return token
